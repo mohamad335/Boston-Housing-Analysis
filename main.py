@@ -107,7 +107,7 @@ def y_train_sactter_plot():
     plt.ylabel('Predicted Price')
     plt.title('Actual vs Predicted Price')
     plt.savefig('images/scatter_plotly/y_train_sactter_plot.png')
-    plt.show()
+    plt.close()
     #residuals vs predict price
     plt.figure(figsize=(10, 6))
     plt.scatter(predict_values, residuals,c='indigo', alpha=0.5)
@@ -117,8 +117,26 @@ def y_train_sactter_plot():
     plt.ylabel('Residuals')
     plt.title('Residuals vs Predicted Price')
     plt.savefig('images/scatter_plotly/residuals_vs_predict_price.png')
-    plt.show()
+    plt.close()
 y_train_sactter_plot()
+#calculate the mean and the skewness of residuals
+residuals_mean = round(residuals.mean(),2)
+residuals_skew = round(residuals.skew(),2)
+print(f'Mean of residuals: {residuals_mean:.2f}')
+print(f'Skewness of residuals: {residuals_skew:.2f}')
+#use seaborn to displot a histogram of residuals
+def residuals_histogram():
+    sns.displot(residuals, kde=True, aspect=2)
+    plt.xlabel('price')
+    plt.ylabel('count')
+    plt.title(f'Residuals Skew {residuals_skew} and Mean {residuals_mean}')
+    plt.subplots_adjust(top=0.9)
+    plt.savefig('images/histogram_plot/residuals_histogram.png')
+    plt.show()
+residuals_histogram()
+
+
+ 
 
 
 
