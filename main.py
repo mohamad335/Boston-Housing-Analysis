@@ -214,6 +214,22 @@ def residuals_log_histogram():
     plt.savefig('images/histogram_plot/residuals_log_histogram.png')
     plt.close()
 residuals_log_histogram()
+# Starting Point: Average Values in the Dataset
+features = data.drop(['PRICE'], axis=1)
+average_vals = features.mean().values
+property_stats = pd.DataFrame(data=average_vals.reshape(1, len(features.columns)), 
+                              columns=features.columns)
+stats=property_stats
+# Make Prediction
+log_estimate = regression_log.predict(property_stats)[0]
+print(f'Log Price estimate: {log_estimate:.3f}')
+# Convert Log to Actual Dollar Value
+dollar_estimate = np.exp(log_estimate)*1000
+print(f'Property Value in Dollars: {dollar_estimate:.7f}')
+#premuim for having an extra room
+extra_room_premium = np.exp(regression_log_coef).loc['RM'].values[0]*1000
+print(f'Premium for having an extra room in the dwelling: {extra_room_premium:.2f}')
+
 
 
 
