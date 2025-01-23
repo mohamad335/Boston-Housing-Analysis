@@ -43,7 +43,32 @@ def chas_bar_chart():
                 y=chas_value, 
                 color=chas_value,
                 labels={'x': 'Next to Charles River', 'y': 'Number of Homes'}, 
-                title='Frequency of CHAS Values')
+                title='Next charles river ?')
     fig.write_image('images/CHAS_bar_chart.png')
     fig.show()
-chas_bar_chart()
+
+# Function to create and save jointplots
+def create_and_save_jointplots(data, x_feature, y_feature, filename, color):
+    with sns.axes_style('darkgrid'):
+        plot = sns.jointplot(x=data[x_feature], 
+                             y=data[y_feature], 
+                             height=4, 
+                             kind='scatter',
+                             color=color, 
+                             joint_kws={'alpha':0.5})
+        # Set axis labels
+        plot.set_axis_labels(x_feature, y_feature, fontsize=12)
+        # Add title to the plot
+        plot.fig.suptitle(f'{x_feature} vs {y_feature}', y=1.03, fontsize=14)
+        # Adjust the title position
+        plot.fig.subplots_adjust(top=0.95)
+        # Save the plot
+        plot.savefig(f'images/{filename}.png')
+        plt.close()
+
+# Create and save jointplots
+create_and_save_jointplots(data, 'DIS', 'NOX', 'DIS_vs_NOX', 'blue')
+create_and_save_jointplots(data, 'INDUS', 'NOX', 'INDUS_vs_NOX', 'green')
+create_and_save_jointplots(data, 'LSTAT', 'RM', 'LSTAT_vs_RM', 'red')
+create_and_save_jointplots(data, 'LSTAT', 'PRICE', 'LSTAT_vs_PRICE', 'purple')
+create_and_save_jointplots(data, 'RM', 'PRICE', 'RM_vs_PRICE', 'orange')
