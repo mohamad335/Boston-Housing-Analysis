@@ -4,6 +4,7 @@ import seaborn as sns
 import plotly.express as px
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 data = pd.read_csv('data/boston.csv', index_col=0)
 #how many student are there per teacher on avarage
 avrg_student_per_teacher = data['PTRATIO'].mean()
@@ -45,7 +46,7 @@ def chas_bar_chart():
                 labels={'x': 'Next to Charles River', 'y': 'Number of Homes'}, 
                 title='Next charles river ?')
     fig.write_image('images/CHAS_bar_chart.png')
-    fig.show()
+    fig.close()
 
 # Function to create and save jointplots
 def create_and_save_jointplots(data, x_feature, y_feature, filename, color):
@@ -63,7 +64,7 @@ def create_and_save_jointplots(data, x_feature, y_feature, filename, color):
         # Adjust the title position
         plot.fig.subplots_adjust(top=0.95)
         # Save the plot
-        plot.savefig(f'images/{filename}.png')
+        plot.savefig(f'images/joinplot/{filename}.png')
         plt.close()
 
 # Create and save jointplots
@@ -72,3 +73,52 @@ create_and_save_jointplots(data, 'INDUS', 'NOX', 'INDUS_vs_NOX', 'green')
 create_and_save_jointplots(data, 'LSTAT', 'RM', 'LSTAT_vs_RM', 'red')
 create_and_save_jointplots(data, 'LSTAT', 'PRICE', 'LSTAT_vs_PRICE', 'purple')
 create_and_save_jointplots(data, 'RM', 'PRICE', 'RM_vs_PRICE', 'orange')
+#split training and test dataset
+features=data.drop('PRICE', axis=1)
+X_train, X_test, y_train, y_test = train_test_split(features, data['PRICE'], test_size=0.2, random_state=10)
+# % of training set
+train_pct = 100*len(X_train)/len(features)
+print(f'Training data is {train_pct:.3}% of the total data.')
+
+# % of test data set
+test_pct = 100*X_test.shape[0]/features.shape[0]
+print(f'Test data makes up the remaining {test_pct:0.3}%.')
+
+#multivariable regression
+regression = LinearRegression()
+regression.fit(X_train, y_train)
+r_squared = regression.score(X_test, y_test)
+print(f'R-squared value of the model: {r_squared:.3}')
+#evaluate the coefficient of the model
+regression_coef = pd.DataFrame(data=regression.coef_, index=X_train.columns, columns=['Coefficient'])
+#premium for having an extra room
+extra_room_premium = regression_coef.loc['RM'].values[0]*1000
+print(f'Premium for having an extra room in the dwelling: {extra_room_premium:.2f}')
+#Analyse the estimate values and Regression Residuals
+predict_values=regression.predict(X_train)
+residuals = (y_train - predict_values )
+# create two scatter plot the first of y_train and the second for residuals vs predict price
+def y_train_sactter_plot():
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_train, predict_values,c='indigo', alpha=0.5)
+    #add a line of best fit
+    plt.plot([y_train.min(), y_train.max()], [y_train.min(), y_train.max()], 'r--', lw=2)
+    plt.xlabel('Actual Price')
+    plt.ylabel('Predicted Price')
+    plt.title('Actual vs Predicted Price')
+    plt.savefig('images/scatter_plotly/y_train_sactter_plot.png')
+    plt.show()
+    #residuals vs predict price
+    plt.figure(figsize=(10, 6))
+    plt.scatter(predict_values, residuals,c='indigo', alpha=0.5)
+    #add a line of best fit
+    plt.plot([predict_values.min(), predict_values.max()], [0, 0], 'r--', lw=2)
+    plt.xlabel('Predicted Price')
+    plt.ylabel('Residuals')
+    plt.title('Residuals vs Predicted Price')
+    plt.savefig('images/scatter_plotly/residuals_vs_predict_price.png')
+    plt.show()
+y_train_sactter_plot()
+
+
+
