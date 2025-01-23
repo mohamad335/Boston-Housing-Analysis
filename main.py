@@ -132,9 +132,20 @@ def residuals_histogram():
     plt.title(f'Residuals Skew {residuals_skew} and Mean {residuals_mean}')
     plt.subplots_adjust(top=0.9)
     plt.savefig('images/histogram_plot/residuals_histogram.png')
-    plt.show()
+    plt.close()
 residuals_histogram()
-
+#by seaborn use displot to create histogram of price
+price_skew=round(data['PRICE'].skew(), 2)
+print(f'Skewness of price: {price_skew:.2f}')
+def price_histogram():
+    sns.displot(data['PRICE'], kde=True, aspect=2)
+    plt.xlabel('price')
+    plt.ylabel('count')
+    plt.title(f'Price Skew {price_skew}')
+    plt.subplots_adjust(top=0.9)
+    plt.savefig('images/histogram_plot/price_histogram.png')
+    plt.show()
+price_histogram()
 
  
 
