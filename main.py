@@ -31,11 +31,19 @@ def create_and_save_displots(data, features):
         plot = sns.displot(data[feature], kde=True, aspect=2)
         plot.set_axis_labels(feature, y_axis_titles[feature])
         plot.fig.suptitle(f'Distribution of {feature}', y=1.03)  # Adjust title position
-        plot.savefig(f'images/{feature}_distribution.png')
+        plot.figsave(f'images/{feature}_distribution.png')
         plt.close()
 # Create and save displots
 features = ['PRICE', 'RM', 'DIS', 'RAD']
-create_and_save_displots(data, features)
 
-
-
+#create a bar chart plotly for CHAST to see how many home away from the river
+def chas_bar_chart():
+    chas_value=data['CHAS'].value_counts().sort_index()
+    fig = px.bar(x=['No','Yes'], 
+                y=chas_value, 
+                color=chas_value,
+                labels={'x': 'Next to Charles River', 'y': 'Number of Homes'}, 
+                title='Frequency of CHAS Values')
+    fig.write_image('images/CHAS_bar_chart.png')
+    fig.show()
+chas_bar_chart()
