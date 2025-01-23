@@ -144,8 +144,22 @@ def price_histogram():
     plt.title(f'Price Skew {price_skew}')
     plt.subplots_adjust(top=0.9)
     plt.savefig('images/histogram_plot/price_histogram.png')
-    plt.show()
+    plt.close()
 price_histogram()
+#histogram for log price and modify the skew
+log_price = np.log(data['PRICE'])
+log_price_skew = round(log_price.skew(), 2)
+print(f'Skewness of log price: {log_price_skew:.2f}')
+def log_price_histogram():
+    sns.displot(log_price, kde=True, aspect=2)
+    plt.xlabel('log price')
+    plt.ylabel('count')
+    plt.title(f'Log Price Skew {log_price_skew}')
+    plt.subplots_adjust(top=0.9)
+    plt.savefig('images/histogram_plot/log_price_histogram.png')
+    plt.show()
+#as we see we make the skew better by log the price value it become closer than to zero
+log_price_histogram()
 
  
 
