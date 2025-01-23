@@ -176,8 +176,7 @@ regression_log_coef = pd.DataFrame(data=regression_log.coef_,
                                       columns=['Coefficient'])
 predict_values_log = regression_log.predict(X_train_log)
 residuals_log= (y_train_log - predict_values_log)
-residuals_log_mean = round(residuals_log.mean(), 2)
-residuals_log_skew = round(residuals_log.skew(), 2)
+
 '''okay before when we plot the residuals histogram we see that the skew was 1.11 is away from zero
 so we log the price to make it better and control error '''
 def y_train_log_sactter_plot():
@@ -189,7 +188,7 @@ def y_train_log_sactter_plot():
     plt.ylabel('Predicted Price')
     plt.title('Actual vs Predicted Price')
     plt.savefig('images/scatter_plotly/y_train_log_sactter_plot.png')
-    plt.show()
+    plt.close()
     #residuals vs predict price
     plt.figure(figsize=(10, 6))
     plt.scatter(predict_values_log, residuals_log, c='indigo', alpha=0.5)
@@ -199,8 +198,23 @@ def y_train_log_sactter_plot():
     plt.ylabel('Residuals')
     plt.title('Residuals vs Predicted Price')
     plt.savefig('images/scatter_plotly/residuals_log_vs_predict_price.png')
-    plt.show()
+    plt.close()
 y_train_log_sactter_plot()
+residuals_log_mean = round(residuals_log.mean(), 2)
+print(f'Mean of residuals: {residuals_log_mean:.2f}')
+residuals_log_skew = round(residuals_log.skew(), 2)
+print(f'Skewness of residuals: {residuals_log_skew:.2f}')
+#the rsdiuals histogram by seaborn as you see the skew are 0.09 it become more improved than the previous 1.46
+def residuals_log_histogram():
+    sns.displot(residuals_log, kde=True, aspect=2)
+    plt.xlabel('price')
+    plt.ylabel('count')
+    plt.title(f'Residuals Skew {residuals_log_skew} and Mean {residuals_log_mean}')
+    plt.subplots_adjust(top=0.9)
+    plt.savefig('images/histogram_plot/residuals_log_histogram.png')
+    plt.close()
+residuals_log_histogram()
+
 
 
 
