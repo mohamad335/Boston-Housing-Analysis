@@ -157,9 +157,56 @@ def log_price_histogram():
     plt.title(f'Log Price Skew {log_price_skew}')
     plt.subplots_adjust(top=0.9)
     plt.savefig('images/histogram_plot/log_price_histogram.png')
-    plt.show()
+    plt.close()
 #as we see we make the skew better by log the price value it become closer than to zero
 log_price_histogram()
+#use the log price to train the model
+X_train_log, X_test_log, y_train_log, y_test_log = train_test_split(features,
+                                                                    log_price,
+                                                                    test_size=0.2,
+                                                                    random_state=10)
+
+regression_log = LinearRegression()
+regression_log.fit(X_train_log, y_train_log)
+r_squared_log = regression_log.score(X_test_log, y_test_log)
+print(f'R-squared value of the model: {r_squared_log:.3}')
+#evaluate the coefficient of the model
+regression_log_coef = pd.DataFrame(data=regression_log.coef_,
+                                    index=X_train_log.columns,
+                                      columns=['Coefficient'])
+predict_values_log = regression_log.predict(X_train_log)
+residuals_log= (y_train_log - predict_values_log)
+residuals_log_mean = round(residuals_log.mean(), 2)
+residuals_log_skew = round(residuals_log.skew(), 2)
+'''okay before when we plot the residuals histogram we see that the skew was 1.11 is away from zero
+so we log the price to make it better and control error '''
+def y_train_log_sactter_plot():
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_train_log, predict_values_log, c='indigo', alpha=0.5)
+    #add a line of best fit
+    plt.plot([y_train_log.min(), y_train_log.max()], [y_train_log.min(), y_train_log.max()], 'r--', lw=2)
+    plt.xlabel('Actual Price')
+    plt.ylabel('Predicted Price')
+    plt.title('Actual vs Predicted Price')
+    plt.savefig('images/scatter_plotly/y_train_log_sactter_plot.png')
+    plt.show()
+    #residuals vs predict price
+    plt.figure(figsize=(10, 6))
+    plt.scatter(predict_values_log, residuals_log, c='indigo', alpha=0.5)
+    #add a line of best fit
+    plt.plot([predict_values_log.min(), predict_values_log.max()], [0, 0], 'r--', lw=2)
+    plt.xlabel('Predicted Price')
+    plt.ylabel('Residuals')
+    plt.title('Residuals vs Predicted Price')
+    plt.savefig('images/scatter_plotly/residuals_log_vs_predict_price.png')
+    plt.show()
+y_train_log_sactter_plot()
+
+
+
+
+
+
 
  
 
