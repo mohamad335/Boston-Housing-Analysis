@@ -1,30 +1,118 @@
-### Understand the Boston House Price Dataset
 
----------------------------
+# Boston Housing Analysis and Prediction Project
 
-**Characteristics:**  
+## Overview
+This project performs an analysis on the Boston housing dataset to predict house prices using linear regression models. The project involves various data exploration techniques, feature engineering, model training, evaluation, and visualization of residuals. Additionally, the analysis includes the effects of variables like the number of rooms and proximity to the Charles River on house prices.
 
-    :Number of Instances: 506 
+### Objectives:
+1. Analyze the relationships between various features (such as number of rooms, distance to employment centers, and proximity to the Charles River) and housing prices.
+2. Build linear regression models to predict house prices.
+3. Evaluate the model's performance by looking at R-squared values and residuals.
+4. Improve model predictions by transforming the target variable (price) using a logarithmic transformation.
 
-    :Number of Attributes: 13 numeric/categorical predictive. The Median Value (attribute 14) is the target.
+---
 
-    :Attribute Information (in order):
-        1. CRIM     per capita crime rate by town
-        2. ZN       proportion of residential land zoned for lots over 25,000 sq.ft.
-        3. INDUS    proportion of non-retail business acres per town
-        4. CHAS     Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-        5. NOX      nitric oxides concentration (parts per 10 million)
-        6. RM       average number of rooms per dwelling
-        7. AGE      proportion of owner-occupied units built prior to 1940
-        8. DIS      weighted distances to five Boston employment centres
-        9. RAD      index of accessibility to radial highways
-        10. TAX      full-value property-tax rate per $10,000
-        11. PTRATIO  pupil-teacher ratio by town
-        12. B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
-        13. LSTAT    % lower status of the population
-        14. PRICE     Median value of owner-occupied homes in $1000's
-        
-    :Missing Attribute Values: None
+## Dataset:
+The dataset used is the **Boston Housing dataset**, which contains information on various attributes of houses in Boston, such as:
+- **CRIM**: Crime rate
+- **ZN**: Proportion of residential land zoned for large plots
+- **INDUS**: Proportion of non-retail business acres per town
+- **CHAS**: Whether the house is next to the Charles River (1) or not (0)
+- **RM**: Average number of rooms per dwelling
+- **AGE**: Proportion of houses built before 1940
+- **DIS**: Weighted distance to employment centers
+- **RAD**: Accessibility to radial highways
+- **TAX**: Property tax rate
+- **PTRATIO**: Pupil-teacher ratio
+- **B**: Proportion of residents of African American descent
+- **LSTAT**: Percentage of lower status population
+- **PRICE**: Median value of homes
 
-    :Creator: Harrison, D. and Rubinfeld, D.L.
+### File Structure:
+```
+/project-directory
+    /images
+        /scatter_plotly  (Folder for scatter plots)
+        /histogram_plot  (Folder for histograms)
+        /joinplot        (Folder for joint plots)
+    boston.csv           (Boston Housing dataset)
+    main.py              (Main code file)
+    README.md            (Project overview)
+```
 
+---
+
+## Requirements:
+- **Python 3.x**
+- Required libraries:
+  - `pandas`
+  - `numpy`
+  - `seaborn`
+  - `matplotlib`
+  - `plotly`
+  - `scikit-learn`
+
+### To install dependencies:
+```bash
+pip install pandas numpy seaborn matplotlib plotly scikit-learn
+```
+
+---
+
+## Steps and Functions:
+1. **Data Exploration**:
+    - Calculate basic statistics, such as average students per teacher, average price of homes, and min/max values for various features.
+    - Generate distribution plots (displots) for key features (`PRICE`, `RM`, `DIS`, `RAD`).
+    - Create a bar chart to visualize how many houses are near the Charles River (`CHAS`).
+
+2. **Regression Analysis**:
+    - Split the dataset into training and testing sets.
+    - Train a linear regression model on the training data and evaluate its performance using R-squared value.
+    - Analyze the model’s coefficients, focusing on the premium for having an extra room (`RM`).
+
+3. **Residuals and Predictions**:
+    - Create scatter plots to analyze actual vs predicted values and residuals vs predicted prices.
+    - Create a histogram of residuals to check for skewness and evaluate the fit of the model.
+    - Log-transform the price to improve model fit, then re-train and re-evaluate the model.
+
+4. **Final Prediction**:
+    - Calculate the log price estimate and convert it to an actual dollar value.
+    - Evaluate the effect of the number of rooms (`RM`) on house prices.
+
+---
+
+## How to Run the Project:
+1. **Step 1**: Download the dataset (`boston.csv`) and place it in the project directory.
+2. **Step 2**: Ensure all dependencies are installed (use `pip install` as shown above).
+3. **Step 3**: Run the script:
+   ```bash
+   python main.py
+   ```
+4. The script will output the results to the console, such as:
+   - Average number of students per teacher
+   - Average house price
+   - R-squared values for models
+   - Premium for an extra room
+   - Residuals analysis
+
+5. **Visualizations**:
+   - The generated plots (scatter plots, histograms, etc.) will be saved in the `images` folder, organized by type.
+   - You can view these plots in the respective folders:
+     - `scatter_plotly/`
+     - `histogram_plot/`
+     - `joinplot/`
+
+---
+
+## Key Insights:
+- The premium for having an extra room was estimated using the coefficient for `RM` in the regression model.
+- Residuals analysis helped identify how well the model fits the data and whether there were any patterns in the errors.
+- Log-transforming the house prices improved the model's skewness and overall fit, as evidenced by lower residuals skew and improved R-squared values.
+- The proximity to the Charles River (`CHAS`) is an important feature in determining house prices, with houses near the river having different pricing dynamics.
+
+---
+
+## Conclusion:
+This project demonstrates a comprehensive workflow for analyzing and predicting house prices in Boston using linear regression. By exploring the dataset, evaluating the regression model's performance, and using residuals and transformations, we were able to improve the model and gain valuable insights into the factors that influence house prices.
+
+---
